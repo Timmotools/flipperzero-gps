@@ -114,7 +114,10 @@ static void render_callback(Canvas* const canvas, void* context)
 
 char* resolve_course(float data)
 {
-  if (data <= 11.25 && data >= 348.76)
+  if (data > 0 && data <= 11.25)
+  {
+    return "N";
+  } else if (data > 348.76 && data < 360)
   {
     return "N";
   } else if (data > 11.25 && data <= 33.75)
@@ -162,8 +165,7 @@ char* resolve_course(float data)
   } else if (data > 326.25 && data <= 348.75)
   {
     return "N-NW";
-  } else 
-  {
+  } else {
     return "nan";
   }
 }
