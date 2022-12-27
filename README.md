@@ -1,3 +1,10 @@
+This is a fork of EZOD's FAP. https://github.com/ezod/flipperzero-gps
+
+I have changed gps.c to show KPH for speed and N, E, S and W (and the betweens) for course. FAP has been compiled for API 11.2
+
+I have tested this with a BN-180 GPS module I use for drone builds. Build video here https://youtu.be/MFM9TglyS0Y
+
+
 # GPS for Flipper Zero
 
 A simple Flipper Zero application for NMEA 0183 serial GPS modules, such as the
