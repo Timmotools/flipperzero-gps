@@ -4,6 +4,8 @@
 #include <gui/gui.h>
 #include <string.h>
 
+char* resolve_course(float data);
+
 typedef enum
 {
   EventTypeTick,
@@ -39,9 +41,64 @@ static void render_callback(Canvas* const canvas, void* context)
   canvas_draw_str_aligned(canvas, 32, 18, AlignCenter, AlignBottom, buffer);
   snprintf(buffer, 64, "%f", (double)gps_uart->status.longitude);
   canvas_draw_str_aligned(canvas, 96, 18, AlignCenter, AlignBottom, buffer);
-  snprintf(buffer, 64, "%.1f", (double)gps_uart->status.course);
+  
+  /*
+  if (gps_uart->status.course <= 11.25 && gps_uart->status.course >= 348.76)
+  {
+    snprintf(buffer, 64, "N");
+  } else if (gps_uart->status.course > 11.25 && gps_uart->status.course <= 33.75)
+  {
+    snprintf(buffer, 64, "N-NE");
+  } else if (gps_uart->status.course > 33.75 && gps_uart->status.course <= 56.25)
+  {
+    snprintf(buffer, 64, "NE");
+  } else if (gps_uart->status.course > 56.25 && gps_uart->status.course <= 78.75)
+  {
+    snprintf(buffer, 64, "E-NE");
+  } else if (gps_uart->status.course > 78.75 && gps_uart->status.course <= 101.25)
+  {
+    snprintf(buffer, 64, "E");
+  } else if (gps_uart->status.course > 101.25 && gps_uart->status.course <= 123.75)
+  {
+    snprintf(buffer, 64, "E-SE");
+  } else if (gps_uart->status.course > 123.75 && gps_uart->status.course <= 146.25)
+  {
+    snprintf(buffer, 64, "SE");
+  } else if (gps_uart->status.course > 146.25 && gps_uart->status.course <= 168.75)
+  {
+    snprintf(buffer, 64, "S-SE");
+  } else if (gps_uart->status.course > 168.75 && gps_uart->status.course <= 191.25)
+  {
+    snprintf(buffer, 64, "S");
+  } else if (gps_uart->status.course > 191.25 && gps_uart->status.course <= 213.75)
+  {
+    snprintf(buffer, 64, "S-SW");
+  } else if (gps_uart->status.course > 213.75 && gps_uart->status.course <= 236.25)
+  {
+    snprintf(buffer, 64, "SW");
+  } else if (gps_uart->status.course > 236.25 && gps_uart->status.course <= 258.75)
+  {
+    snprintf(buffer, 64, "W-SW");
+  } else if (gps_uart->status.course > 258.75 && gps_uart->status.course <= 281.25)
+  {
+    snprintf(buffer, 64, "W");
+  } else if (gps_uart->status.course > 281.25 && gps_uart->status.course <= 303.75)
+  {
+    snprintf(buffer, 64, "W-NW");
+  } else if (gps_uart->status.course > 303.75 && gps_uart->status.course <= 326.25)
+  {
+    snprintf(buffer, 64, "NW");
+  } else if (gps_uart->status.course > 326.25 && gps_uart->status.course <= 348.75)
+  {
+    snprintf(buffer, 64, "N-NW");
+  } */
+  
+  // snprintf(buffer, 64, "%.1f", (double)gps_uart->status.course);
+  // snprintf(buffer, 64, data);
+  snprintf(buffer, 64, "%s", resolve_course((double)gps_uart->status.course));
+  
   canvas_draw_str_aligned(canvas, 21, 40, AlignCenter, AlignBottom, buffer);
-  snprintf(buffer, 64, "%.2f kn", (double)gps_uart->status.speed);
+  snprintf(buffer, 64, "%.2f Kph", (double)(gps_uart->status.speed * 1.852));
   canvas_draw_str_aligned(canvas, 64, 40, AlignCenter, AlignBottom, buffer);
   snprintf(buffer, 64, "%.1f %c", (double)gps_uart->status.altitude, tolower(gps_uart->status.altitude_units));
   canvas_draw_str_aligned(canvas, 107, 40, AlignCenter, AlignBottom, buffer);
@@ -52,6 +109,63 @@ static void render_callback(Canvas* const canvas, void* context)
   canvas_draw_str_aligned(canvas, 96, 62, AlignCenter, AlignBottom, buffer);
 
   release_mutex((ValueMutex*)context, gps_uart);
+}
+
+
+char* resolve_course(float data)
+{
+  if (data <= 11.25 && data >= 348.76)
+  {
+    return "N";
+  } else if (data > 11.25 && data <= 33.75)
+  {
+    return "N-NE";
+  } else if (data > 33.75 && data <= 56.25)
+  {
+    return "NE";
+  } else if (data > 56.25 && data <= 78.75)
+  {
+    return "E-NE";
+  } else if (data > 78.75 && data <= 101.25)
+  {
+    return "E";
+  } else if (data > 101.25 && data <= 123.75)
+  {
+    return "E-SE";
+  } else if (data > 123.75 && data <= 146.25)
+  {
+    return "SE";
+  } else if (data > 146.25 && data <= 168.75)
+  {
+    return "S-SE";
+  } else if (data > 168.75 && data <= 191.25)
+  {
+    return "S";
+  } else if (data > 191.25 && data <= 213.75)
+  {
+    return "S-SW";
+  } else if (data > 213.75 && data <= 236.25)
+  {
+    return "SW";
+  } else if (data > 236.25 && data <= 258.75)
+  {
+    return "W-SW";
+  } else if (data > 258.75 && data <= 281.25)
+  {
+    return "W";
+  } else if (data > 281.25 && data <= 303.75)
+  {
+    return "W-NW";
+  } else if (data > 303.75 && data <= 326.25)
+  {
+    return "NW";
+  } else if (data > 326.25 && data <= 348.75)
+  {
+    return "N-NW";
+  } else 
+  {
+    return "nan";
+  }
 }
 
 static void input_callback(InputEvent* input_event, FuriMessageQueue* event_queue)
